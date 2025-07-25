@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci - Votre Diagnostic IA est en cours | ProNeXus™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-cyan: #00CFFF;
+            --primary-purple: #652C90;
+            --accent-purple: #B23CD8;
+            --dark-blue: #0A2240;
+            --light-blue: #E6F9FF;
+            --dark-bg: #1B1B1F;
+            --gradient-primary: linear-gradient(135deg, #652C90 0%, #B23CD8 100%);
+            --gradient-accent: linear-gradient(135deg, #00CFFF 0%, #652C90 100%);
+            --gradient-dark: linear-gradient(180deg, #0A2240 0%, #1B1B1F 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 207, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(178, 60, 216, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(101, 44, 144, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 20px 40px;
+            position: relative;
+        }
+        
+        .logo {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 400;
+        }
+        
+        /* Success Card */
+        .success-card {
+            background: linear-gradient(135deg, rgba(0, 207, 255, 0.1) 0%, rgba(101, 44, 144, 0.1) 100%);
+            border: 1px solid rgba(0, 207, 255, 0.3);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-accent);
+            border-radius: 24px;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .success-card:hover::before {
+            opacity: 0.3;
+        }
+        
+        .success-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        .success-card h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #00CFFF, #B23CD8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .success-card p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        
+        .success-card strong {
+            color: var(--primary-cyan);
+        }
+        
+        /* Steps Section */
+        .steps-section {
+            background: rgba(10, 34, 64, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 207, 255, 0.2);
+            border-radius: 24px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            animation: slideInUp 0.7s ease-out 0.1s both;
+        }
+        
+        .section-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+        
+        .steps-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .step-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .step-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-cyan);
+            transform: translateX(10px);
+            box-shadow: 0 8px 32px rgba(0, 207, 255, 0.2);
+        }
+        
+        .step-number {
+            min-width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(178, 60, 216, 0.4);
+        }
+        
+        .step-content h3 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .step-content p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+        
+        /* Calendly Section */
+        .calendly-section {
+            background: rgba(101, 44, 144, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(178, 60, 216, 0.3);
+            border-radius: 24px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+        
+        .calendly-inline-widget {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Pack Section */
+        .pack-section {
+            background: var(--gradient-primary);
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.9s ease-out 0.3s both;
+        }
+        
+        .pack-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        .pack-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .pack-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .pack-subtitle {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+        
+        .pack-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .pack-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pack-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 207, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .pack-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 207, 255, 0.3);
+        }
+        
+        .pack-item:hover::before {
+            opacity: 1;
+        }
+        
+        .pack-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .pack-item h4 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .pack-item p {
+            margin-bottom: 25px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--accent-purple) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 207, 255, 0.4);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(0, 207, 255, 0.6);
+        }
+        
+        .btn-primary:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Teaser Section */
+        .teaser-section {
+            background: linear-gradient(135deg, rgba(10, 34, 64, 0.6) 0%, rgba(27, 27, 31, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-cyan);
+            border-radius: 24px;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+        
+        .teaser-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 207, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        .teaser-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .teaser-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        .teaser-title {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #00CFFF, #B23CD8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .teaser-text {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 36px;
+            }
+            
+            .success-card h1 {
+                font-size: 28px;
+            }
+            
+            .section-title {
+                font-size: 26px;
+            }
+            
+            .pack-title {
+                font-size: 32px;
+            }
+            
+            .pack-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-section,
+            .calendly-section,
+            .pack-section,
+            .teaser-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">ProNeXus™</div>
+            <p>L'Intelligence Artificielle au service de votre agence immobilière</p>
+        </div>
+
+        <!-- Success Card -->
+        <div class="success-card">
+            <div class="success-icon">✅</div>
+            <h1>Merci pour votre confiance !</h1>
+            <p>Votre score IA est en cours d'analyse par nos algorithmes.<br>
+            Vous allez recevoir votre diagnostic personnalisé sous quelques minutes<br>
+            par <strong>WhatsApp</strong> et <strong>Email</strong>.</p>
+        </div>
+
+        <!-- Steps Section -->
+        <div class="steps-section">
+            <h2 class="section-title">📋 Prochaines étapes pour maximiser votre transformation IA</h2>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Complétez votre Audit IA approfondi</h3>
+                        <p>Répondez à notre checklist stratégique en 5 étapes pour obtenir un score IA plus précis et des recommandations ultra-personnalisées.</p>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Réservez votre RDV stratégique</h3>
+                        <p>Échangez directement avec un expert ProNeXus™ pour analyser vos besoins spécifiques et définir votre feuille de route IA.</p>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Recevez votre Plan IA personnalisé</h3>
+                        <p>Suite à notre échange, vous recevrez un plan d'action détaillé avec les solutions IA adaptées à votre agence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendly Section -->
+        <div class="calendly-section">
+            <h2 class="section-title">📅 Réservez votre audit stratégique personnalisé</h2>
+            <!-- Calendly inline widget begin -->
+            <div class="calendly-inline-widget" data-url="https://calendly.com/contact-pronexus/audit-ia-personnalise-agence-immo" style="min-width:320px;height:630px;"></div>
+            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+            <!-- Calendly inline widget end -->
+        </div>
+
+        <!-- Pack Section -->
+        <div class="pack-section">
+            <div class="pack-content">
+                <h2 class="pack-title">🎁 Votre Pack IA Offert</h2>
+                <p class="pack-subtitle">Deux ressources exclusives pour accélérer votre transformation digitale</p>
+                
+                <div class="pack-items">
+                    <div class="pack-item">
+                        <div class="pack-icon">📊</div>
+                        <h4>Audit IA en 5 Étapes</h4>
+                        <p>Évaluez la maturité digitale de votre agence et identifiez vos axes prioritaires d'automatisation.</p>
+                        <a href="checklist-audit-ia.html" class="btn-primary">Accéder à l'audit</a>
+                    </div>
+                    
+                    <div class="pack-item">
+                        <div class="pack-icon">📖</div>
+                        <h4>Guide des 10 Automatisations IA</h4>
+                        <p>Découvrez les 10 automatisations IA essentielles pour transformer votre agence immobilière.</p>
+                        <a href="guide-10-automatisations.html" class="btn-primary">Télécharger le guide</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Teaser Section -->
+        <div class="teaser-section">
+            <div class="teaser-content">
+                <div class="teaser-icon">🔐</div>
+                <h3 class="teaser-title">Votre Plan IA personnalisé vous attend</h3>
+                <p class="teaser-text">Il vous sera remis en exclusivité après votre RDV stratégique avec notre expert.<br>
+                Ce document sur-mesure contiendra votre roadmap complète de transformation digitale.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2025 ProNeXus™ - Tous droits réservés | L'IA au service de l'immobilier</p>
+        </div>
+    </div>
+</body>
+</html>

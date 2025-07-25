@@ -1,0 +1,134 @@
+{
+  "name": "ProNeXus\u2122 - Lead Magnet IA GalaXLytique",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 2,
+        "maxResults": 1
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 250
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "ProNeXus Lead Magnet Hook",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "airtable:CreateRecord",
+      "version": 1,
+      "parameters": {
+        "base": "appvMCqxCmYXcxvYA",
+        "table": "tblLEADMAGNET123"
+      },
+      "mapper": {
+        "record": {
+          "Email": "{{1.email}}",
+          "Nom": "{{1.name}}",
+          "Source": "{{1.source}}",
+          "Date inscription": "{{now}}",
+          "Pack envoy\u00e9": "Non",
+          "Consentement": "Oui"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "email:SendEmail",
+      "version": 1,
+      "parameters": {},
+      "mapper": {
+        "to": "{{1.email}}",
+        "subject": "\ud83c\udf81 {{1.name}}, votre Pack IA ProNeXus\u2122 est arriv\u00e9 !",
+        "html": "{{template.email_lead_magnet}}",
+        "from": {
+          "email": "cadeau@pronexus.fr",
+          "name": "ProNeXus\u2122 AIAA"
+        },
+        "attachments": [
+          {
+            "fileName": "Guide_10_Automatisations_IA_Rentables_ProNeXus.pdf",
+            "data": "{{pdf.guide_automatisations}}"
+          },
+          {
+            "fileName": "Checklist_Audit_IA_5_Etapes_ProNeXus.pdf",
+            "data": "{{pdf.checklist_audit}}"
+          }
+        ]
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "airtable:UpdateRecord",
+      "version": 1,
+      "parameters": {
+        "base": "appvMCqxCmYXcxvYA",
+        "table": "tblLEADMAGNET123"
+      },
+      "mapper": {
+        "id": "{{2.id}}",
+        "record": {
+          "Pack envoy\u00e9": "Oui",
+          "Date envoi": "{{now}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 5,
+      "module": "slack:CreateMessage",
+      "version": 1,
+      "parameters": {
+        "account": "{{connections.slack}}"
+      },
+      "mapper": {
+        "channel": "#lead-magnets",
+        "text": "\ud83c\udf81 *Nouveau t\u00e9l\u00e9chargement Lead Magnet*\\n\\n\ud83d\udce7 Email : {{1.email}}\\n\ud83d\udc64 Nom : {{1.name}}\\n\ud83d\udd16 Source : {{1.source}}\\n\u23f0 Date : {{formatDate(now; \"DD/MM/YYYY HH:mm\")}}\\n\\n\u2705 Pack IA envoy\u00e9 avec succ\u00e8s !"
+      },
+      "metadata": {
+        "designer": {
+          "x": 1200,
+          "y": 250
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false
+    }
+  }
+}
