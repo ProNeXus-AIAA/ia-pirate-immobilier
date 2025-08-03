@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide des 10 Automatisations IA Essentielles - ProNeXus™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-cyan: #00CFFF;
+            --primary-purple: #652C90;
+            --accent-purple: #B23CD8;
+            --dark-blue: #0A2240;
+            --light-blue: #E6F9FF;
+            --dark-bg: #1B1B1F;
+            --gradient-primary: linear-gradient(135deg, #652C90 0%, #B23CD8 100%);
+            --gradient-accent: linear-gradient(135deg, #00CFFF 0%, #652C90 100%);
+            --gradient-dark: linear-gradient(180deg, #0A2240 0%, #1B1B1F 100%);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(0, 207, 255, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(178, 60, 216, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(101, 44, 144, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Animated Background Patterns */
+        .bg-pattern {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);
+            animation: drift 20s linear infinite;
+        }
+        
+        @keyframes drift {
+            from {
+                transform: translate(-100px, -100px);
+            }
+            to {
+                transform: translate(100px, 100px);
+            }
+        }
+        
+        .guide-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Header Section */
+        .guide-header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        .guide-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 207, 255, 0.2);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .guide-header h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .guide-header p {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Automation Cards */
+        .automations-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+        
+        .automation-card {
+            background: linear-gradient(135deg, rgba(10, 34, 64, 0.4) 0%, rgba(27, 27, 31, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .automation-card:nth-child(1) { animation-delay: 0.1s; }
+        .automation-card:nth-child(2) { animation-delay: 0.2s; }
+        .automation-card:nth-child(3) { animation-delay: 0.3s; }
+        .automation-card:nth-child(4) { animation-delay: 0.4s; }
+        .automation-card:nth-child(5) { animation-delay: 0.5s; }
+        .automation-card:nth-child(6) { animation-delay: 0.6s; }
+        .automation-card:nth-child(7) { animation-delay: 0.7s; }
+        .automation-card:nth-child(8) { animation-delay: 0.8s; }
+        .automation-card:nth-child(9) { animation-delay: 0.9s; }
+        .automation-card:nth-child(10) { animation-delay: 1s; }
+        
+        .automation-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 207, 255, 0.3), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .automation-card:hover::before {
+            left: 100%;
+        }
+        
+        .automation-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 20px 60px rgba(0, 207, 255, 0.3);
+        }
+        
+        .automation-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .automation-number {
+            min-width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            box-shadow: 0 8px 30px rgba(178, 60, 216, 0.4);
+            position: relative;
+        }
+        
+        .automation-number::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary-cyan);
+            animation: pulse-ring 2s ease-out infinite;
+        }
+        
+        .automation-card h2 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            flex: 1;
+        }
+        
+        .automation-card > p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .benefits {
+            background: rgba(0, 207, 255, 0.08);
+            border: 1px solid rgba(0, 207, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        
+        .benefits h3 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-cyan);
+            margin-bottom: 15px;
+        }
+        
+        .benefits ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .benefits li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+        }
+        
+        .benefits li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--primary-cyan);
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-primary);
+            border-radius: 32px;
+            padding: 80px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+            animation: slideInUp 0.8s ease-out 1.2s both;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+            animation: rotate 25s linear infinite;
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 207, 255, 0.1) 0%, transparent 60%);
+            animation: rotate 30s linear infinite reverse;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-icon {
+            font-size: 72px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.3));
+            animation: bounce 3s ease-in-out infinite;
+        }
+        
+        .cta-section h2 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-section p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: white;
+            color: var(--primary-purple);
+            text-decoration: none;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(0, 207, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cta-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .guide-header h1 {
+                font-size: 36px;
+            }
+            
+            .guide-header p {
+                font-size: 18px;
+            }
+            
+            .automation-card {
+                padding: 30px 20px;
+            }
+            
+            .automation-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .automation-card h2 {
+                font-size: 22px;
+                text-align: center;
+            }
+            
+            .cta-section {
+                padding: 60px 30px;
+            }
+            
+            .cta-section h2 {
+                font-size: 32px;
+            }
+            
+            .cta-button {
+                padding: 16px 40px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <div class="guide-container">
+        <!-- Header -->
+        <div class="guide-header">
+            <div class="guide-badge">Votre Guide IA Offert</div>
+            <h1>📖 Les 10 Automatisations IA Essentielles</h1>
+            <p>Transformez votre agence immobilière avec l'Intelligence Artificielle</p>
+        </div>
+
+        <!-- Automations Grid -->
+        <div class="automations-grid">
+            <!-- Automation 1 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">1</div>
+                    <h2>🎯 Qualification Automatique des Leads</h2>
+                </div>
+                <p>L'IA analyse et score vos prospects en temps réel selon leur potentiel d'achat ou de vente, vous permettant de concentrer vos efforts sur les opportunités les plus prometteuses.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Économie de 3h par jour sur le tri des contacts</li>
+                        <li>Taux de conversion multiplié par 2.5</li>
+                        <li>Focus sur les prospects chauds uniquement</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 2 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">2</div>
+                    <h2>🏠 Estimation Instantanée des Biens</h2>
+                </div>
+                <p>Générez des estimations précises en quelques secondes grâce à l'analyse de milliers de données comparables et aux dernières tendances du marché local.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Précision de 95% sur les estimations</li>
+                        <li>Réponse immédiate aux demandes clients</li>
+                        <li>Gain de crédibilité et de professionnalisme</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 3 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">3</div>
+                    <h2>✍️ Rédaction d'Annonces Optimisées</h2>
+                </div>
+                <p>Créez des annonces immobilières captivantes et SEO-optimisées en 30 secondes, adaptées à chaque plateforme et mettant en valeur les atouts uniques de chaque bien.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>+40% de clics sur vos annonces</li>
+                        <li>Cohérence de votre image de marque</li>
+                        <li>Publication 10x plus rapide</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 4 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">4</div>
+                    <h2>🎥 Visites Virtuelles Intelligentes</h2>
+                </div>
+                <p>Proposez des visites immersives avec assistant IA intégré répondant aux questions en temps réel, permettant une découverte autonome des biens 24/7.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>70% de visites physiques en moins</li>
+                        <li>Disponible 24/7 pour vos clients</li>
+                        <li>Pré-qualification automatique des visiteurs</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 5 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">5</div>
+                    <h2>💬 Chatbot WhatsApp Intelligent</h2>
+                </div>
+                <p>Répondez instantanément aux questions clients et planifiez des rendez-vous automatiquement, créant une expérience client exceptionnelle à toute heure.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Réponse en moins de 3 secondes</li>
+                        <li>Gestion de 100% des demandes</li>
+                        <li>Qualification continue des prospects</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 6 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">6</div>
+                    <h2>📧 Campagnes Email Ultra-Personnalisées</h2>
+                </div>
+                <p>Envoyez le bon message au bon moment à chaque prospect selon son comportement et ses préférences, maximisant l'engagement et les conversions.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Taux d'ouverture de 45%+</li>
+                        <li>Nurturing automatique des leads</li>
+                        <li>ROI marketing multiplié par 4</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 7 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">7</div>
+                    <h2>📱 Publication Multi-Canaux Automatique</h2>
+                </div>
+                <p>Diffusez vos annonces sur 20+ plateformes en un clic avec adaptation automatique des formats, maximisant votre visibilité sans effort supplémentaire.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Visibilité maximale de vos biens</li>
+                        <li>Gain de 5h par semaine</li>
+                        <li>Synchronisation en temps réel</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 8 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">8</div>
+                    <h2>📊 Tableau de Bord Prédictif</h2>
+                </div>
+                <p>Anticipez les tendances du marché et optimisez votre stratégie grâce à l'IA prédictive qui analyse des milliers de signaux en temps réel.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Prévisions à 30/60/90 jours</li>
+                        <li>Alertes opportunités automatiques</li>
+                        <li>Décisions data-driven</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 9 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">9</div>
+                    <h2>📄 Gestion Documentaire Intelligente</h2>
+                </div>
+                <p>Extraction automatique des données, classification intelligente et génération de documents légaux, éliminant les tâches administratives répétitives.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>Zéro erreur administrative</li>
+                        <li>Conformité RGPD automatique</li>
+                        <li>Recherche instantanée dans vos archives</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Automation 10 -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-number">10</div>
+                    <h2>🤝 Assistant IA Personnel</h2>
+                </div>
+                <p>Votre copilote IA qui apprend de vos méthodes et automatise vos tâches répétitives, devenant plus intelligent et efficace chaque jour.</p>
+                <div class="benefits">
+                    <h3>Bénéfices clés :</h3>
+                    <ul>
+                        <li>+50% de productivité individuelle</li>
+                        <li>Formation continue de l'équipe</li>
+                        <li>Amélioration constante des process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="cta-content">
+                <div class="cta-icon">🚀</div>
+                <h2>Prêt à transformer votre agence ?</h2>
+                <p>Découvrez comment ces automatisations peuvent révolutionner votre quotidien et propulser votre agence vers de nouveaux sommets</p>
+                <a href="merci.html" class="cta-button">Obtenir mon Plan IA Personnalisé</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

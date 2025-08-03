@@ -1,0 +1,76 @@
+{
+  "name": "ProNeXus\u2122 - Diagnostic IA Immobilier GalaXLytique",
+  "flow": [
+    {
+      "id": 1,
+      "module": "gateway:CustomWebHook",
+      "version": 1,
+      "parameters": {
+        "hook": 1,
+        "maxResults": 1
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 250
+        },
+        "parameters": [
+          {
+            "name": "hook",
+            "type": "hook:gateway-webhook",
+            "label": "ProNeXus IA Landing Hook",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "module": "airtable:CreateRecord",
+      "version": 1,
+      "parameters": {
+        "base": "appvMCqxCmYXcxvYA",
+        "table": "tblgfzbWDKIlicx5Y"
+      },
+      "mapper": {
+        "record": {
+          "Nom Complet": "{{1.name}}",
+          "Email professionnel": "{{1.email}}",
+          "T\u00e9l\u00e9phone mobile pro": "{{1.phone}}",
+          "Fonction/poste actuel": "{{1.fonction}}",
+          "Nom de l'agence": "{{1.agency}}",
+          "Priorit\u00e9 principale": "{{1.objectif}}",
+          "Processus \u00e0 automatiser": "{{join(1.processus; ', ')}}",
+          "Logiciels utilis\u00e9s": "{{join(1.logiciels; ', ')}}",
+          "Maturit\u00e9 IA": "{{1.maturite}}",
+          "Consentement RGPD": "{{if(1.rgpd_consent; 'Oui'; 'Non')}}",
+          "Date de soumission": "{{now}}",
+          "Source": "Landing IA GalaXLytique"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 250
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false,
+      "confidential": false,
+      "dataloss": false,
+      "dlq": false
+    },
+    "designer": {
+      "orphans": []
+    },
+    "zone": "eu2.make.com"
+  }
+}

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Merci pour votre demande - ProNeXus™ IA pour agences immobilières">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Merci ! Votre DIG Score IA est prêt - ProNeXus™</title>
+    
+    <!-- Preconnect pour optimiser le chargement -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== RESET & BASE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #020E1F;
+            color: #E6F9FF;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+                text-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(0, 207, 255, 0.8);
+                text-shadow: 0 0 40px rgba(0, 207, 255, 0.8);
+            }
+        }
+        
+        @keyframes checkmarkAnimation {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes scoreReveal {
+            0% { 
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% { 
+                transform: scale(1.1) rotate(180deg);
+            }
+            100% { 
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+        
+        /* ========== PARTICLES BACKGROUND ========== */
+        .particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00CFFF;
+            opacity: 0.3;
+            border-radius: 50%;
+            animation: particleFloat 20s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            from {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            to {
+                transform: translateY(-10vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* ========== MAIN CONTAINER ========== */
+        .thank-you-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* ========== VIDEO SECTION ========== */
+        .video-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .video-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 207, 255, 0.05);
+            border: 2px solid rgba(0, 207, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00CFFF, #652C90, #00CFFF);
+            border-radius: 20px;
+            opacity: 0.3;
+            z-index: -1;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .video-placeholder {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            color: #00CFFF;
+            font-size: 24px;
+        }
+        
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+        
+        .dig-score-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            position: relative;
+            animation: scoreReveal 1.5s ease-out forwards;
+        }
+        
+        .dig-score-circle {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00CFFF 0%, #652C90 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 40px rgba(0, 207, 255, 0.5);
+            position: relative;
+        }
+        
+        .dig-score-circle::before {
+            content: '';
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            background: #020E1F;
+            border-radius: 50%;
+            top: 5%;
+            left: 5%;
+        }
+        
+        .score-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: #00CFFF;
+            z-index: 1;
+            text-shadow: 0 0 30px rgba(0, 207, 255, 0.8);
+        }
+        
+        .score-label {
+            font-size: 14px;
+            color: #E6F9FF;
+            z-index: 1;
+            margin-top: -5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(28px, 5vw, 42px);
+            color: #00CFFF;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .hero-text {
+            font-size: clamp(18px, 3vw, 22px);
+            color: #E6F9FF;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+        
+        .highlight {
+            color: #00CFFF;
+            font-weight: 700;
+        }
+        
+        /* ========== BENEFITS SECTION ========== */
+        .benefits-section {
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .benefit-card {
+            background: rgba(0, 207, 255, 0.05);
+            border: 2px solid rgba(0, 207, 255, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 207, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .benefit-card:hover::before {
+            left: 100%;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: #00CFFF;
+            box-shadow: 0 10px 30px rgba(0, 207, 255, 0.3);
+        }
+        
+        .benefit-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .benefit-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00CFFF;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .benefit-text {
+            font-size: 16px;
+            opacity: 0.9;
+            color: #E6F9FF;
+        }
+        
+        /* ========== PROCESS EXPLANATION ========== */
+        .process-explanation {
+            background: linear-gradient(135deg, rgba(101, 44, 144, 0.1) 0%, rgba(0, 207, 255, 0.05) 100%);
+            border: 2px solid rgba(0, 207, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .process-explanation::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00CFFF, #652C90, #00CFFF);
+            border-radius: 20px;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .process-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: #00CFFF;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(0, 207, 255, 0.5);
+        }
+        
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(0, 207, 255, 0.1);
+            border-radius: 50px;
+            border: 1px solid rgba(0, 207, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .process-step.active {
+            background: rgba(0, 207, 255, 0.2);
+            border-color: #00CFFF;
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.3);
+        }
+        
+        .step-icon {
+            font-size: 24px;
+        }
+        
+        .step-text {
+            font-weight: 600;
+            color: #E6F9FF;
+        }
+        
+        .process-arrow {
+            color: #00CFFF;
+            font-size: 20px;
+            opacity: 0.6;
+        }
+        
+        .process-description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #E6F9FF;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .process-description strong {
+            color: #00CFFF;
+        }
+        
+        /* ========== CALENDLY SECTION ========== */
+        .calendly-section {
+            background: rgba(0, 207, 255, 0.05);
+            border: 2px solid rgba(0, 207, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease-out 0.7s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendly-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00CFFF, #652C90, #00CFFF);
+            border-radius: 20px;
+            opacity: 0.3;
+            z-index: -1;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .calendly-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .calendly-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(24px, 4vw, 32px);
+            color: #00CFFF;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(0, 207, 255, 0.5);
+        }
+        
+        .calendly-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .calendly-container {
+            width: 100%;
+            height: 650px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 207, 255, 0.2);
+        }
+        
+        .calendly-inline-widget {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* ========== WHATSAPP CTA ========== */
+        .whatsapp-cta {
+            text-align: center;
+            margin: 40px 0;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+        
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 40px;
+            background: #25D366;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .whatsapp-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .whatsapp-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+        
+        .whatsapp-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.6);
+        }
+        
+        .whatsapp-icon {
+            font-size: 28px;
+        }
+        
+        .whatsapp-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: rgba(230, 249, 255, 0.8);
+        }
+        
+        /* ========== ALTERNATIVE CTA ========== */
+        .alternative-cta {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(101, 44, 144, 0.2) 0%, rgba(0, 207, 255, 0.1) 100%);
+            border-radius: 20px;
+            animation: fadeInUp 0.8s ease-out 0.9s both;
+        }
+        
+        .alternative-cta h3 {
+            font-size: 24px;
+            color: #00CFFF;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: #00CFFF;
+            color: #020E1F;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 207, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            background: #652C90;
+            color: #E6F9FF;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 207, 255, 0.6);
+        }
+        
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid #00CFFF;
+            color: #00CFFF;
+        }
+        
+        .cta-button.secondary:hover {
+            background: #00CFFF;
+            color: #020E1F;
+        }
+        
+        /* ========== FOOTER ========== */
+        .footer {
+            text-align: center;
+            padding: 40px 20px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            color: rgba(230,249,255,0.6);
+            background-color: rgba(2,14,31,0.9);
+            border-top: 1px solid rgba(0, 207, 255, 0.1);
+            margin-top: auto;
+        }
+        
+        .footer-logo {
+            display: inline-block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            color: #00CFFF;
+            text-decoration: none;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 30px rgba(0, 207, 255, 0.8);
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: rgba(0,207,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: #00CFFF;
+            transform: translateY(-2px);
+        }
+        
+        .footer-bottom {
+            opacity: 0.6;
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 768px) {
+            .thank-you-container {
+                padding: 30px 15px;
+            }
+            
+            .video-container {
+                padding: 15px;
+            }
+            
+            .video-placeholder {
+                height: 200px;
+                font-size: 18px;
+            }
+            
+            .dig-score-container {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .score-text {
+                font-size: 40px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .process-arrow {
+                display: none;
+            }
+            
+            .calendly-container {
+                height: 500px;
+            }
+            
+            .calendly-section {
+                padding: 30px 20px;
+            }
+            
+            .whatsapp-button {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        /* ========== LOADING ANIMATION ========== */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #00CFFF;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles-bg" id="particlesBg"></div>
+    
+    <!-- Main Container -->
+    <div class="thank-you-container">
+        <!-- Video Section -->
+        <section class="video-section">
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <!-- Remplacer par <video> ou <iframe> avec votre vidéo -->
+                    <span>📹 Vidéo d'explication (30-45 sec)</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="dig-score-container">
+                <div class="dig-score-circle">
+                    <span class="score-text">75%</span>
+                    <span class="score-label">DIG Score</span>
+                </div>
+            </div>
+            <h1>Félicitations ! Votre DIG Score IA est prêt ✅</h1>
+            <p class="hero-text">
+                Votre <span class="highlight">Diagnostic IA GalaXLytique™</span> vient d'être envoyé 
+                sur votre <span class="highlight">WhatsApp</span> et par <span class="highlight">email</span>.
+            </p>
+        </section>
+        
+        <!-- Benefits Section -->
+        <section class="benefits-section">
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-icon">⏱</span>
+                    <h3 class="benefit-title">Gagnez +10h/semaine</h3>
+                    <p class="benefit-text">Automatisez vos tâches répétitives</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">📈</span>
+                    <h3 class="benefit-title">+40% de conversions</h3>
+                    <p class="benefit-text">Optimisez votre processus commercial</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">💰</span>
+                    <h3 class="benefit-title">ROI dès le 1er mois</h3>
+                    <p class="benefit-text">Résultats mesurables garantis</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Process Explanation -->
+        <section class="process-explanation">
+            <h3 class="process-title">🚀 Votre parcours vers l'automatisation IA</h3>
+            <div class="process-steps">
+                <div class="process-step">
+                    <span class="step-icon">✅</span>
+                    <span class="step-text">DIG Score IA</span>
+                </div>
+                <span class="process-arrow">→</span>
+                <div class="process-step active">
+                    <span class="step-icon">📅</span>
+                    <span class="step-text">RDV Audit IA</span>
+                </div>
+                <span class="process-arrow">→</span>
+                <div class="process-step">
+                    <span class="step-icon">📝</span>
+                    <span class="step-text">Pré-Audit</span>
+                </div>
+                <span class="process-arrow">→</span>
+                <div class="process-step">
+                    <span class="step-icon">🎯</span>
+                    <span class="step-text">Audit Final</span>
+                </div>
+            </div>
+            <p class="process-description">
+                Après réservation, vous recevrez un <strong>court formulaire Pré-Audit</strong> à remplir avant notre rencontre.<br>
+                Ce rendez-vous est <strong>100% offert</strong> et vous repartirez avec un <strong>plan IA personnalisé et chiffré</strong> pour transformer votre agence.
+            </p>
+        </section>
+        
+        <!-- Calendly Section -->
+        <section class="calendly-section">
+            <div class="calendly-header">
+                <h2>📅 Réservez votre Audit IA Complet Offert</h2>
+                <p>Choisissez le créneau qui vous convient (durée : 45 minutes)</p>
+            </div>
+            <div class="calendly-container">
+                <!-- Calendly inline widget -->
+                <iframe 
+                    class="calendly-inline-widget" 
+                    src="https://calendly.com/pronexus-demo/audit-ia-agence"
+                    frameborder="0"
+                    scrolling="no">
+                </iframe>
+            </div>
+        </section>
+        
+        <!-- WhatsApp CTA -->
+        <section class="whatsapp-cta">
+            <a href="https://wa.me/33612034089?text=Bonjour%20👋%20Je%20viens%20de%20recevoir%20mon%20score%20IA%20et%20je%20souhaite%20réserver%20mon%20audit." 
+               class="whatsapp-button" 
+               target="_blank">
+                <span class="whatsapp-icon">💬</span>
+                <span>Discuter sur WhatsApp</span>
+            </a>
+            <p class="whatsapp-text">
+                Besoin d'aide pour choisir votre créneau ? Contactez-nous directement sur WhatsApp
+            </p>
+        </section>
+        
+        <!-- Alternative CTA -->
+        <section class="alternative-cta">
+            <h3>💡 Vous avez des questions sur votre DIG Score ?</h3>
+            <p>Notre équipe d'experts IA est là pour vous accompagner</p>
+            <div class="cta-buttons">
+                <a href="https://www.pronexus.fr" class="cta-button">
+                    🏠 Découvrir ProNeXus™
+                </a>
+                <a href="tel:+33777329982" class="cta-button secondary">
+                    📱 Appeler directement
+                </a>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <a href="https://www.pronexus.fr" class="footer-logo">ProNeXus™</a>
+        <div class="footer-links">
+            <a href="https://www.pronexus.fr">Site principal</a>
+            <a href="tel:+33777329982">📱 07 77 32 99 82</a>
+            <a href="mailto:contact@pronexus.fr">✉️ contact@pronexus.fr</a>
+            <a href="https://www.linkedin.com/company/pronexus-aiaa" target="_blank">LinkedIn</a>
+            <a href="https://www.facebook.com/share/1AbTwoiLaT/?mibextid=wwXIfr" target="_blank">Facebook</a>
+        </div>
+        <div class="footer-bottom">
+            © 2025 ProNeXus™ - Architecte d'Infrastructures IA & Automatisation Métier
+        </div>
+    </footer>
+    
+    <script>
+        // ========== PARTICLES BACKGROUND ==========
+        function createParticles() {
+            const particlesBg = document.getElementById('particlesBg');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size
+                const size = Math.random() * 4 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation duration and delay
+                particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                
+                particlesBg.appendChild(particle);
+            }
+        }
+        
+        // ========== CALENDLY HEIGHT ADJUSTMENT ==========
+        function adjustCalendlyHeight() {
+            const calendlyFrame = document.querySelector('.calendly-inline-widget');
+            if (window.innerWidth < 768) {
+                calendlyFrame.style.height = '500px';
+            } else {
+                calendlyFrame.style.height = '650px';
+            }
+        }
+        
+        // ========== CONFETTI EFFECT ==========
+        function createConfetti() {
+            const colors = ['#00CFFF', '#652C90', '#B23CD8', '#FFD700'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.opacity = Math.random() * 0.8 + 0.2;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '1000';
+                
+                document.body.appendChild(confetti);
+                
+                // Animate confetti
+                let posY = -10;
+                let posX = parseFloat(confetti.style.left);
+                let rotation = 0;
+                let velocityX = (Math.random() - 0.5) * 2;
+                let velocityY = Math.random() * 3 + 2;
+                
+                const animateConfetti = () => {
+                    posY += velocityY;
+                    posX += velocityX;
+                    rotation += 5;
+                    
+                    confetti.style.top = posY + 'px';
+                    confetti.style.left = posX + '%';
+                    confetti.style.transform = `rotate(${rotation}deg)`;
+                    
+                    if (posY < window.innerHeight) {
+                        requestAnimationFrame(animateConfetti);
+                    } else {
+                        confetti.remove();
+                    }
+                };
+                
+                setTimeout(() => {
+                    requestAnimationFrame(animateConfetti);
+                }, i * 30);
+            }
+        }
+        
+        // ========== SCORE ANIMATION ==========
+        function animateScore() {
+            const scoreElement = document.querySelector('.score-text');
+            const targetScore = 75;
+            let currentScore = 0;
+            const duration = 2000;
+            const increment = targetScore / (duration / 50);
+            
+            const timer = setInterval(() => {
+                currentScore += increment;
+                if (currentScore >= targetScore) {
+                    currentScore = targetScore;
+                    clearInterval(timer);
+                }
+                scoreElement.textContent = Math.round(currentScore) + '%';
+            }, 50);
+        }
+        
+        // ========== INITIALIZE ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            adjustCalendlyHeight();
+            
+            // Create confetti effect on page load
+            setTimeout(createConfetti, 500);
+            
+            // Animate score
+            setTimeout(animateScore, 800);
+            
+            // Adjust Calendly height on window resize
+            window.addEventListener('resize', adjustCalendlyHeight);
+            
+            // Track time on page
+            let timeOnPage = 0;
+            setInterval(() => {
+                timeOnPage++;
+                console.log('Time on page:', timeOnPage, 'seconds');
+            }, 1000);
+        });
+        
+        // ========== SMOOTH SCROLL ==========
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

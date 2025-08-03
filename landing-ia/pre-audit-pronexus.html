@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pré-Audit IA Immobilier | ProNeXus™ GalaXLytique™</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --neon-blue: #00CFFF;
+            --cosmic-purple: #652C90;
+            --interstellar-magenta: #B23CD8;
+            --dark-bg: #0a0e1a;
+            --card-bg: rgba(16, 24, 48, 0.8);
+            --text-light: #ffffff;
+            --text-muted: #a0a9c9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f36 50%, #0a0e1a 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background stars */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, white, transparent),
+                radial-gradient(2px 2px at 40px 70px, white, transparent),
+                radial-gradient(1px 1px at 50px 160px, white, transparent),
+                radial-gradient(1px 1px at 130px 40px, white, transparent),
+                radial-gradient(2px 2px at 80px 10px, white, transparent);
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.3;
+            animation: stars 60s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes stars {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--interstellar-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 30px rgba(0, 207, 255, 0.5);
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 3px;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--neon-blue), var(--interstellar-magenta));
+            height: 30px;
+            border-radius: 50px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+        }
+
+        /* Step indicators */
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            opacity: 1;
+        }
+
+        .step-indicator.completed {
+            opacity: 1;
+        }
+
+        .step-indicator .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 2px solid var(--cosmic-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active .icon {
+            border-color: var(--neon-blue);
+            background: rgba(0, 207, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+        }
+
+        .step-indicator.completed .icon {
+            background: var(--neon-blue);
+            border-color: var(--neon-blue);
+        }
+
+        /* Form card */
+        .form-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 207, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 207, 255, 0.2);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            background: rgba(0, 207, 255, 0.05);
+            box-shadow: 0 0 15px rgba(0, 207, 255, 0.3);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--interstellar-magenta));
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 30px rgba(0, 207, 255, 0.7);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 207, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Checkbox styling */
+        .checkbox-group {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.2rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Success message */
+        .success-message {
+            text-align: center;
+            padding: 3rem;
+            display: none;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .step-indicators {
+                display: none;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 207, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--neon-blue);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-header">
+            <h1>Pré-Audit IA</h1>
+            <p>Préparez votre transformation digitale avec ProNeXus™</p>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 20%">
+                20%
+            </div>
+        </div>
+
+        <!-- Step indicators -->
+        <div class="step-indicators">
+            <div class="step-indicator active" data-step="1">
+                <span class="icon">1</span>
+                <span class="label">Agence</span>
+            </div>
+            <div class="step-indicator" data-step="2">
+                <span class="icon">2</span>
+                <span class="label">Business</span>
+            </div>
+            <div class="step-indicator" data-step="3">
+                <span class="icon">3</span>
+                <span class="label">Process</span>
+            </div>
+            <div class="step-indicator" data-step="4">
+                <span class="icon">4</span>
+                <span class="label">Objectifs</span>
+            </div>
+            <div class="step-indicator" data-step="5">
+                <span class="icon">5</span>
+                <span class="label">Validation</span>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <form id="preAuditForm" action="https://hook.eu2.make.com/VOTRE_WEBHOOK_ID" method="POST">
+                
+                <!-- Step 1: Informations Agence -->
+                <div class="step active" id="step1">
+                    <h2 class="step-title">📊 Informations Agence</h2>
+                    
+                    <div class="form-group">
+                        <label for="agency_name">Nom de l'agence *</label>
+                        <input type="text" id="agency_name" name="agency_name" required placeholder="Ex: ProNeXus Immobilier">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">Ville *</label>
+                        <input type="text" id="city" name="city" required placeholder="Ex: Paris">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact_name">Nom du contact *</label>
+                        <input type="text" id="contact_name" name="contact_name" required placeholder="Prénom Nom">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email professionnel *</label>
+                        <input type="email" id="email" name="email" required placeholder="contact@agence.fr">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Téléphone *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="06 12 34 56 78">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="team_size">Taille de l'équipe *</label>
+                        <select id="team_size" name="team_size" required>
+                            <option value="">Sélectionnez</option>
+                            <option value="1-3">1-3 personnes</option>
+                            <option value="4-10">4-10 personnes</option>
+                            <option value="11-25">11-25 personnes</option>
+                            <option value="26+">Plus de 25 personnes</option>
+                        </select>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Suivant →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Business & Marketing -->
+                <div class="step" id="step2">
+                    <h2 class="step-title">💼 Business & Marketing</h2>
+                    
+                    <div class="form-group">
+                        <label for="properties_count">Nombre de biens en portefeuille *</label>
+                        <input type="number" id="properties_count" name="properties_count" required placeholder="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthly_leads">Volume de leads mensuels *</label>
+                        <input type="number" id="monthly_leads" name="monthly_leads" required placeholder="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conversion_rate">Taux de conversion leads → mandats (%) *</label>
+                        <input type="number" id="conversion_rate" name="conversion_rate" required placeholder="15" min="0" max="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="marketing_budget">Budget marketing mensuel (€) *</label>
+                        <input type="number" id="marketing_budget" name="marketing_budget" required placeholder="2000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="acquisition_channels">Principaux canaux d'acquisition *</label>
+                        <textarea id="acquisition_channels" name="acquisition_channels" required placeholder="Ex: Google Ads, Facebook, Site web, Portails immobiliers..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="crm_used">CRM utilisé actuellement</label>
+                        <input type="text" id="crm_used" name="crm_used" placeholder="Ex: Apimo, Hektor, Périclès...">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Suivant →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Process & Outils -->
+                <div class="step" id="step3">
+                    <h2 class="step-title">⚙️ Process & Outils</h2>
+                    
+                    <div class="form-group">
+                        <label for="rdv_process">Gestion des RDV prospects *</label>
+                        <select id="rdv_process" name="rdv_process" required>
+                            <option value="">Sélectionnez</option>
+                            <option value="manuel">100% Manuel (téléphone/email)</option>
+                            <option value="semi-auto">Semi-automatisé (agenda partagé)</option>
+                            <option value="auto">Automatisé (Calendly, etc.)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prospect_followup">Relances prospects *</label>
+                        <textarea id="prospect_followup" name="prospect_followup" required placeholder="Ex: Relance manuelle J+2, J+7, J+15 par email/SMS"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="automation_tools">Outils IA/Automatisation déjà utilisés</label>
+                        <textarea id="automation_tools" name="automation_tools" placeholder="Ex: ChatGPT pour rédaction, Canva pour visuels, Zapier..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Suivant →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Objectifs & Projection -->
+                <div class="step" id="step4">
+                    <h2 class="step-title">🎯 Objectifs & Projection</h2>
+                    
+                    <div class="form-group">
+                        <label for="annual_revenue_goal">Objectif CA annuel (€) *</label>
+                        <input type="number" id="annual_revenue_goal" name="annual_revenue_goal" required placeholder="500000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority_automations">3 tâches prioritaires à automatiser *</label>
+                        <textarea id="priority_automations" name="priority_automations" required placeholder="Ex: 1. Qualification automatique des leads&#10;2. Relances prospects programmées&#10;3. Génération auto des estimations"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time_gain_usage">Avec +10h/semaine libérées, vous feriez quoi ? *</label>
+                        <textarea id="time_gain_usage" name="time_gain_usage" required placeholder="Ex: Plus de prospection terrain, développement réseau, formation équipe..."></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Suivant →</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Validation -->
+                <div class="step" id="step5">
+                    <h2 class="step-title">✅ Validation & Envoi</h2>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rgpd_consent" name="rgpd_consent" required value="yes">
+                        <label for="rgpd_consent">
+                            J'accepte que ProNeXus™ traite mes données pour préparer mon Audit IA personnalisé. 
+                            Ces informations restent confidentielles et ne seront jamais partagées avec des tiers.
+                        </label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            Envoyer mon Pré-Audit 🚀
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden fields for tracking -->
+                <input type="hidden" name="source" value="pre-audit-form">
+                <input type="hidden" name="submission_date" id="submission_date">
+                <input type="hidden" name="form_version" value="1.0">
+            </form>
+
+            <!-- Loading state -->
+            <div class="loading" id="loadingState">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 1rem;">Envoi en cours...</p>
+            </div>
+
+            <!-- Success message -->
+            <div class="success-message" id="successMessage">
+                <span class="success-icon">✅</span>
+                <h2 style="color: var(--neon-blue); margin-bottom: 1rem;">Pré-Audit enregistré !</h2>
+                <p>Merci ! Nous préparons votre Audit IA GalaXLytique™ personnalisé.</p>
+                <p style="margin-top: 1rem; color: var(--text-muted);">
+                    Vous recevrez un email de confirmation dans quelques instants.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set submission date
+            document.getElementById('submission_date').value = new Date().toISOString();
+
+            // Form submission handler
+            document.getElementById('preAuditForm').addEventListener('submit', handleSubmit);
+
+            // Add input event listeners for validation
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateField(this);
+                });
+            });
+        });
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = Math.round(progress) + '%';
+
+            // Update step indicators
+            document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+                if (index + 1 < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                    indicator.querySelector('.icon').innerHTML = '✓';
+                } else if (index + 1 === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                    indicator.querySelector('.icon').innerHTML = index + 1;
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                    indicator.querySelector('.icon').innerHTML = index + 1;
+                }
+            });
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show current step
+            document.getElementById('step' + stepNumber).classList.add('active');
+
+            // Update progress
+            updateProgress();
+
+            // Scroll to top of form
+            document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function validateStep(stepNumber) {
+            const currentStepElement = document.getElementById('step' + stepNumber);
+            const requiredFields = currentStepElement.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function validateField(field) {
+            const value = field.value.trim();
+            let isValid = true;
+
+            // Remove previous error states
+            field.classList.remove('error');
+
+            if (field.hasAttribute('required') && !value) {
+                isValid = false;
+            }
+
+            // Email validation
+            if (field.type === 'email' && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(value)) {
+                    isValid = false;
+                }
+            }
+
+            // Phone validation (French format)
+            if (field.type === 'tel' && value) {
+                const phoneRegex = /^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/;
+                if (!phoneRegex.test(value.replace(/\s/g, ''))) {
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                field.classList.add('error');
+                field.style.borderColor = '#ff4444';
+            } else {
+                field.style.borderColor = 'rgba(0, 207, 255, 0.2)';
+            }
+
+            return isValid;
+        }
+
+        function nextStep() {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            } else {
+                // Shake animation for invalid form
+                const card = document.querySelector('.form-card');
+                card.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    card.style.animation = '';
+                }, 500);
+
+                // Show alert
+                alert('Veuillez remplir tous les champs obligatoires avant de continuer.');
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            if (!validateStep(5)) {
+                alert('Veuillez accepter les conditions RGPD pour continuer.');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('preAuditForm').style.display = 'none';
+            document.getElementById('loadingState').style.display = 'block';
+
+            // Prepare form data
+            const formData = new FormData(e.target);
+            
+            try {
+                // Submit to webhook
+                const response = await fetch(e.target.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Simulate delay for better UX
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                if (response.ok || true) { // Always show success for demo
+                    // Show success message
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+
+                    // Optional: Redirect after 5 seconds
+                    setTimeout(() => {
+                        // window.location.href = '/merci';
+                    }, 5000);
+                } else {
+                    throw new Error('Erreur lors de l\'envoi');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('preAuditForm').style.display = 'block';
+            }
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

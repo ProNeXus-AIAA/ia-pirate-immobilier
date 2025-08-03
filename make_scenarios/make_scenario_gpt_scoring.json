@@ -1,0 +1,104 @@
+{
+  "name": "ProNeXus\u2122 - GPT Scoring IA Immobilier",
+  "flow": [
+    {
+      "id": 1,
+      "module": "airtable:WatchRecords",
+      "version": 1,
+      "parameters": {
+        "base": "appvMCqxCmYXcxvYA",
+        "table": "tblgfzbWDKIlicx5Y",
+        "triggerField": "Date de soumission",
+        "limit": 10
+      },
+      "mapper": {
+        "formula": "AND({Score Lead} = BLANK(), {Email professionnel} != BLANK())"
+      },
+      "metadata": {
+        "designer": {
+          "x": 0,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 2,
+      "module": "openai-gpt:CreateCompletion",
+      "version": 1,
+      "parameters": {
+        "apiKey": "{{connections.openai}}",
+        "model": "gpt-4",
+        "messages": [
+          {
+            "role": "system",
+            "content": "Tu es un expert en qualification de leads pour ProNeXus\u2122. Analyse la qualit\u00e9 d'un lead immobilier selon des crit\u00e8res pr\u00e9cis.\n\nCrit\u00e8res de scoring (0-100) :\n- Fonction d\u00e9cisionnaire (CEO, Directeur) : +30 points\n- Fonction op\u00e9rationnelle (Agent, Commercial) : +15 points\n- Objectif \"int\u00e9grer IA\" ou \"automatiser processus\" : +25 points\n- 5+ processus \u00e0 automatiser : +20 points\n- Utilise d\u00e9j\u00e0 des outils avanc\u00e9s (Make, Airtable) : +15 points\n- Maturit\u00e9 IA avanc\u00e9e : +15 points\n\nTags :\n- CHAUD : 70-100\n- TIEDE : 40-69\n- FROID : 0-39\n\nFormat JSON :\n{\n  \"lead_score\": 85,\n  \"tag_lead_score\": \"CHAUD\",\n  \"analyse_lead\": \"Analyse d\u00e9taill\u00e9e...\",\n  \"action_recommandee\": \"Action commerciale sugg\u00e9r\u00e9e\"\n}"
+          },
+          {
+            "role": "user",
+            "content": "Analyse ce lead :\n\nFonction : {{1.fields.`Fonction/poste actuel`}}\nAgence : {{1.fields.`Nom de l'agence`}}\nObjectif : {{1.fields.`Priorit\u00e9 principale`}}\nProcessus : {{1.fields.`Processus \u00e0 automatiser`}}\nLogiciels : {{1.fields.`Logiciels utilis\u00e9s`}}\nMaturit\u00e9 : {{1.fields.`Maturit\u00e9 IA`}}\nScore IA : {{1.fields.`Score IA`}}\n\nCalcule le lead score et d\u00e9termine la strat\u00e9gie commerciale."
+          }
+        ],
+        "maxTokens": 800,
+        "temperature": 0.2
+      },
+      "metadata": {
+        "designer": {
+          "x": 300,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 3,
+      "module": "json:ParseJSON",
+      "version": 1,
+      "parameters": {
+        "type": ""
+      },
+      "mapper": {
+        "json": "{{2.choices[0].message.content}}"
+      },
+      "metadata": {
+        "designer": {
+          "x": 600,
+          "y": 250
+        }
+      }
+    },
+    {
+      "id": 4,
+      "module": "airtable:UpdateRecord",
+      "version": 1,
+      "parameters": {
+        "base": "appvMCqxCmYXcxvYA",
+        "table": "tblgfzbWDKIlicx5Y"
+      },
+      "mapper": {
+        "id": "{{1.id}}",
+        "record": {
+          "Score Lead": "{{3.lead_score}}",
+          "Tag Lead Score": "{{3.tag_lead_score}}",
+          "Analyse Lead": "{{3.analyse_lead}}",
+          "Action Commerciale": "{{3.action_recommandee}}",
+          "Date Scoring": "{{now}}"
+        }
+      },
+      "metadata": {
+        "designer": {
+          "x": 900,
+          "y": 250
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "scenario": {
+      "roundtrips": 1,
+      "maxErrors": 3,
+      "autoCommit": true,
+      "autoCommitTriggerLast": true,
+      "sequential": false
+    }
+  }
+}

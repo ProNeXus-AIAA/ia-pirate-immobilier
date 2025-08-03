@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit IA en 5 Étapes - ProNeXus™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-cyan: #00CFFF;
+            --primary-purple: #652C90;
+            --accent-purple: #B23CD8;
+            --dark-blue: #0A2240;
+            --light-blue: #E6F9FF;
+            --dark-bg: #1B1B1F;
+            --gradient-primary: linear-gradient(135deg, #652C90 0%, #B23CD8 100%);
+            --gradient-accent: linear-gradient(135deg, #00CFFF 0%, #652C90 100%);
+            --gradient-dark: linear-gradient(180deg, #0A2240 0%, #1B1B1F 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: #fff;
+            padding-top: 100px;
+            position: relative;
+        }
+        
+        /* Background Effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(178, 60, 216, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(0, 207, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(101, 44, 144, 0.1) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Progress Navigation */
+        .progress-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(27, 27, 31, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 25px 20px;
+        }
+
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .progress-line-bg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .progress-line-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: var(--gradient-accent);
+            transform: translateY(-50%);
+            transition: width 0.5s ease;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.5);
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 3;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(10, 34, 64, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active {
+            background: var(--gradient-primary);
+            border-color: var(--primary-cyan);
+            transform: scale(1.2);
+            box-shadow: 0 0 30px rgba(0, 207, 255, 0.6);
+        }
+
+        .progress-step.completed {
+            background: var(--gradient-accent);
+            border-color: var(--primary-cyan);
+        }
+
+        .progress-step.completed::after {
+            content: '✓';
+            position: absolute;
+            font-size: 24px;
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Form Container */
+        .audit-form {
+            background: rgba(10, 34, 64, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 207, 255, 0.2);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .audit-form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(178, 60, 216, 0.1) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Steps */
+        .step-section {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-section.active {
+            display: block;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .step-icon {
+            font-size: 64px;
+            margin-right: 30px;
+            filter: drop-shadow(0 4px 20px rgba(0, 207, 255, 0.5));
+        }
+
+        .step-title h2 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .step-title p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 35px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkbox-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 207, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .checkbox-item:hover::before {
+            left: 100%;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(0, 207, 255, 0.1);
+            border-color: var(--primary-cyan);
+            transform: translateX(5px);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            accent-color: var(--primary-cyan);
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-cyan);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 207, 255, 0.3);
+        }
+
+        input[type="text"]::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-prev:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .btn-next {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 207, 255, 0.4);
+        }
+
+        .btn-next:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 30px rgba(0, 207, 255, 0.6);
+        }
+
+        .btn-submit {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(178, 60, 216, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(178, 60, 216, 0.6);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Confirmation */
+        .confirmation {
+            display: none;
+            text-align: center;
+            padding: 80px 40px;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .confirmation-icon {
+            font-size: 96px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 8px 30px rgba(0, 207, 255, 0.6));
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .confirmation h2 {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .confirmation p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+        }
+
+        .score-display {
+            margin: 30px 0;
+            padding: 30px;
+            background: rgba(0, 207, 255, 0.1);
+            border: 2px solid var(--primary-cyan);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .score-value {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 64px;
+            font-weight: 800;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 80px;
+            }
+
+            .progress-nav {
+                padding: 20px 15px;
+            }
+
+            .progress-step {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .audit-form {
+                padding: 30px 20px;
+            }
+
+            .step-icon {
+                font-size: 48px;
+                margin-right: 20px;
+            }
+
+            .step-title h2 {
+                font-size: 26px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .confirmation h2 {
+                font-size: 32px;
+            }
+
+            .score-value {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Navigation -->
+    <div class="progress-nav">
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line-bg"></div>
+                <div class="progress-line-fill" id="progress-fill" style="width: 0%"></div>
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-step" data-step="3">3</div>
+                <div class="progress-step" data-step="4">4</div>
+                <div class="progress-step" data-step="5">5</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎯 Audit IA en 5 Étapes</h1>
+            <p>Évaluez la maturité digitale de votre agence immobilière</p>
+        </div>
+
+        <!-- Form -->
+        <div class="audit-form">
+            <form id="audit-form" action="https://hook.us1.make.com/TON_WEBHOOK_ID" method="POST">
+                <!-- Hidden Fields -->
+                <input type="hidden" name="score_ia" id="score_ia">
+                <input type="hidden" name="email_lead" id="email_lead" value="">
+
+                <!-- Step 1: Rôles & Organisation -->
+                <div class="step-section active" data-step="1">
+                    <div class="step-header">
+                        <div class="step-icon">👥</div>
+                        <div class="step-title">
+                            <h2>Étape 1 : Rôles & Organisation</h2>
+                            <p>Identifions les forces vives de votre agence</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels rôles existent dans votre agence ?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role_directeur" name="roles[]" value="directeur">
+                                <label for="role_directeur">👔 Directeur d'agence</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role_nego" name="roles[]" value="negociateur">
+                                <label for="role_nego">🤝 Négociateur immobilier</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role_assistant" name="roles[]" value="assistant">
+                                <label for="role_assistant">📋 Assistant(e) commercial(e)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role_compta" name="roles[]" value="comptable">
+                                <label for="role_compta">💰 Comptable</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="role_marketing" name="roles[]" value="marketing">
+                                <label for="role_marketing">📱 Responsable marketing</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="crm_utilise">Quel CRM utilisez-vous actuellement ?</label>
+                        <input type="text" id="crm_utilise" name="crm_utilise" placeholder="Ex: Apimo, Hektor, Perizia, autre...">
+                    </div>
+                </div>
+
+                <!-- Step 2: Process Clés -->
+                <div class="step-section" data-step="2">
+                    <div class="step-header">
+                        <div class="step-icon">⚙️</div>
+                        <div class="step-title">
+                            <h2>Étape 2 : Process Clés</h2>
+                            <p>Analysons vos processus actuels</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels processus souhaitez-vous optimiser en priorité ?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="process_leads" name="process[]" value="gestion_leads">
+                                <label for="process_leads">📊 Gestion et qualification des leads</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="process_estimation" name="process[]" value="estimation">
+                                <label for="process_estimation">🏠 Estimation automatique des biens</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="process_visite" name="process[]" value="visite_virtuelle">
+                                <label for="process_visite">🎥 Visites virtuelles et présentation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="process_contenu" name="process[]" value="creation_contenu">
+                                <label for="process_contenu">✍️ Création de contenu (annonces, réseaux sociaux)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="process_admin" name="process[]" value="admin">
+                                <label for="process_admin">📄 Gestion administrative et contractuelle</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tache_non_delegable">Quelle tâche vous refusez catégoriquement de déléguer ?</label>
+                        <input type="text" id="tache_non_delegable" name="tache_non_delegable" placeholder="Ex: Négociation finale, signature des mandats...">
+                    </div>
+                </div>
+
+                <!-- Step 3: Outils & Budget -->
+                <div class="step-section" data-step="3">
+                    <div class="step-header">
+                        <div class="step-icon">💻</div>
+                        <div class="step-title">
+                            <h2>Étape 3 : Outils & Budget</h2>
+                            <p>Votre écosystème technologique actuel</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels outils utilisez-vous déjà ?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="outil_crm" name="outils[]" value="crm">
+                                <label for="outil_crm">📊 CRM immobilier</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="outil_portail" name="outils[]" value="portails">
+                                <label for="outil_portail">🌐 Portails immobiliers (SeLoger, LeBonCoin...)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="outil_visite" name="outils[]" value="visite_3d">
+                                <label for="outil_visite">🎥 Outils de visite virtuelle</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="outil_signature" name="outils[]" value="signature">
+                                <label for="outil_signature">✍️ Signature électronique</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="outil_ia" name="outils[]" value="ia_tools">
+                                <label for="outil_ia">🤖 Outils IA (ChatGPT, Claude...)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="style_agence">En 3 mots, comment décririez-vous votre agence ?</label>
+                        <input type="text" id="style_agence" name="style_agence" placeholder="Ex: Moderne, familiale, innovante...">
+                    </div>
+                </div>
+
+                <!-- Step 4: Problèmes & Blocages -->
+                <div class="step-section" data-step="4">
+                    <div class="step-header">
+                        <div class="step-icon">🚧</div>
+                        <div class="step-title">
+                            <h2>Étape 4 : Problèmes & Blocages</h2>
+                            <p>Identifions les freins à votre croissance</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels sont vos principaux défis actuels ?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defi_temps" name="defis[]" value="manque_temps">
+                                <label for="defi_temps">⏰ Manque de temps pour les tâches à valeur ajoutée</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defi_leads" name="defis[]" value="qualite_leads">
+                                <label for="defi_leads">📉 Qualité insuffisante des leads entrants</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defi_concurrence" name="defis[]" value="concurrence">
+                                <label for="defi_concurrence">⚔️ Concurrence accrue (agences en ligne, IA...)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defi_equipe" name="defis[]" value="formation_equipe">
+                                <label for="defi_equipe">👥 Formation et montée en compétences de l'équipe</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="defi_roi" name="defis[]" value="mesure_roi">
+                                <label for="defi_roi">📊 Difficulté à mesurer le ROI des actions marketing</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="frein_ia">Qu'est-ce qui vous freine aujourd'hui dans le passage à l'IA ?</label>
+                        <textarea id="frein_ia" name="frein_ia" placeholder="Ex: Budget, complexité technique, résistance au changement..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 5: Vision 2025 -->
+                <div class="step-section" data-step="5">
+                    <div class="step-header">
+                        <div class="step-icon">🚀</div>
+                        <div class="step-title">
+                            <h2>Étape 5 : Vision 2025</h2>
+                            <p>Projetez-vous dans l'avenir</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels sont vos objectifs prioritaires pour 2025 ?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="obj_ca" name="objectifs[]" value="augmenter_ca">
+                                <label for="obj_ca">💰 Augmenter le CA de +30%</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="obj_productivite" name="objectifs[]" value="productivite">
+                                <label for="obj_productivite">⚡ Doubler la productivité par collaborateur</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="obj_innovation" name="objectifs[]" value="innovation">
+                                <label for="obj_innovation">🔮 Devenir l'agence la plus innovante de ma zone</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="obj_equilibre" name="objectifs[]" value="equilibre">
+                                <label for="obj_equilibre">⚖️ Retrouver un équilibre vie pro/perso</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="obj_expansion" name="objectifs[]" value="expansion">
+                                <label for="obj_expansion">🌍 Ouvrir de nouvelles agences</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start_date">Quand souhaitez-vous mettre en place votre système IA ?</label>
+                        <input type="date" id="start_date" name="start_date">
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-prev" onclick="previousStep()" style="display: none;">← Précédent</button>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">Suivant →</button>
+                    <button type="submit" class="btn btn-submit" style="display: none;">Envoyer mon Audit IA</button>
+                </div>
+            </form>
+
+            <!-- Confirmation Message -->
+            <div id="confirmation" class="confirmation">
+                <div class="confirmation-icon">✅</div>
+                <h2>Merci ! Votre audit a bien été transmis.</h2>
+                <p>Score IA détecté :</p>
+                <div class="score-display">
+                    <div class="score-value"><span id="score_result">--</span>/100</div>
+                </div>
+                <p>Nous l'utiliserons pour préparer votre Plan IA personnalisé,<br>remis lors du RDV stratégique.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        // Update progress
+        function updateProgress() {
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const progressFill = document.getElementById('progress-fill');
+            
+            // Update step states
+            progressSteps.forEach((step, index) => {
+                const stepNum = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+            
+            // Update progress bar
+            const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressFill.style.width = `${progressPercent}%`;
+        }
+
+        // Show current step
+        function showStep(step) {
+            document.querySelectorAll('.step-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                document.querySelector(`.step-section[data-step="${step}"]`).classList.add('active');
+            }, 100);
+            
+            // Update buttons
+            const prevBtn = document.querySelector('.btn-prev');
+            const nextBtn = document.querySelector('.btn-next');
+            const submitBtn = document.querySelector('.btn-submit');
+            
+            prevBtn.style.display = step === 1 ? 'none' : 'block';
+            
+            if (step === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            } else {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            }
+            
+            updateProgress();
+        }
+
+        // Navigate to next step
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Navigate to previous step
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Navigate by clicking progress steps
+        document.querySelectorAll('.progress-step').forEach(step => {
+            step.addEventListener('click', function() {
+                const stepNum = parseInt(this.getAttribute('data-step'));
+                if (stepNum <= currentStep || stepNum === currentStep + 1) {
+                    currentStep = stepNum;
+                    showStep(currentStep);
+                }
+            });
+        });
+
+        // Calculate score
+        function calculateScore() {
+            let score = 0;
+            
+            // Count checked checkboxes
+            score += document.querySelectorAll('input[type="checkbox"]:checked').length * 3;
+            
+            // Bonus points
+            if (document.getElementById('crm_utilise').value.trim()) score += 2;
+            if (document.getElementById('tache_non_delegable').value.trim()) score += 1;
+            if (document.getElementById('frein_ia').value.trim()) score += 2;
+            if (document.getElementById('style_agence').value.trim()) score += 1;
+            if (document.getElementById('start_date').value) score += 1;
+            
+            // Normalize to 100
+            return Math.min(Math.round((score / 30) * 100), 100);
+        }
+
+        // Form submission
+        const form = document.getElementById('audit-form');
+        const confirmation = document.getElementById('confirmation');
+        const scoreField = document.getElementById('score_ia');
+        const scoreResult = document.getElementById('score_result');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Calculate and set score
+            const score = calculateScore();
+            scoreField.value = score;
+            scoreResult.textContent = score;
+            
+            // Prepare form data
+            const formData = new FormData(form);
+            
+            // Send to webhook
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                // Hide form, show confirmation
+                form.style.display = 'none';
+                confirmation.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }).catch(error => {
+                console.error('Error:', error);
+                // Still show confirmation
+                form.style.display = 'none';
+                confirmation.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Initialize
+        showStep(currentStep);
+    </script>
+</body>
+</html>
